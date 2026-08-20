@@ -2,21 +2,28 @@ name: Hello CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - 'feature/**'
 
 jobs:
-  greet:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Say hello
-        run: echo "Hello from GitHub Actions!"
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Show the date
-        run: date
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
 
-      - name: Show the runner OS
-        run: uname -a
+      - name: Install dependencies
+        run: npm install
 
-      - name: List files in the repo
-        run: ls -la
+      - name: Run tests
+        run: npm test
+
+      - name: Build project
+        run: npm run build

@@ -2,7 +2,7 @@
   "name": "ci-labs",
   "version": "1.0.0",
   "scripts": {
-    "build": "echo Build complete! && if not exist dist mkdir dist && copy index.js dist\\",
+    "build": "echo \"Build complete!\" && mkdir -p dist && cp index.js dist/",
     "test": "node test.js"
   }
 }

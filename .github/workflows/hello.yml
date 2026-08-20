@@ -1,23 +1,39 @@
-name: Hello CI
+name: Node.js CI
 
 on:
   push:
-    branches:
-      - main
-      - 'feature/**'
+    branches: [main]
+    paths:
+      - '*.js'
+      - 'package.json'
+
+  pull_request:
+    branches: [main]
+
+  workflow_dispatch:
+    inputs:
+      log_level:
+        description: 'Log verbosity'
+        required: false
+        default: 'info'
+        type: choice
+        options:
+          - info
+          - debug
+          - warn
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
@@ -25,5 +41,8 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Build project
+      - name: Build
         run: npm run build
+
+      - name: Show log level
+        run: echo "Log level is ${{ github.event.inputs.log_level || 'not set' }}"

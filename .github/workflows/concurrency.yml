@@ -1,0 +1,40 @@
+name: Concurrency Control
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  concurrency-test:
+    name: Test Concurrency
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Simulate long-running job
+        run: |
+          echo "Concurrency test running..."
+          sleep 10
+
+      - name: Confirm completion
+        run: echo "Concurrency workflow completed successfully."

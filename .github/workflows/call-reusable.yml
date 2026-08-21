@@ -1,0 +1,12 @@
+name: Call Reusable CI
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  reusable-ci:
+    name: Run Reusable CI
+    uses: ./.github/workflows/reusable-ci.yml
